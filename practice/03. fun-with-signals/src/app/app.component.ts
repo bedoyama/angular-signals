@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -39,6 +39,9 @@ export class AppComponent {
 
   constructor() {
     // 7. Define an effect that displays both signals to the console whenever any of them changes
-    console.log('Effect: firstNumber =', this.firstNumber(), ', secondNumber =', this.secondNumber());
+    // console.log('Effect: firstNumber =', this.firstNumber(), ', secondNumber =', this.secondNumber());
+    effect(() => {
+      console.log('Effect: firstNumber =', this.firstNumber(), ', secondNumber =', this.secondNumber());
+    });
   }
 }
