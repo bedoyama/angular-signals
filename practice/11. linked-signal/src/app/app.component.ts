@@ -11,17 +11,34 @@ import { PRODUCTS } from './products';
 export class AppComponent {
   readonly products = signal(['Apple', 'Banana', 'Cherry']);
 
-  readonly selectedProduct = signal('Apple');
+  // readonly selectedProduct = signal('Apple');
 
   /* 1. Create a simple linked signal that sets the selected product to the first
         product in the list., wheven the inventory changes */
+  // readonly selectedProduct = linkedSignal(() => this.products()[0]);
 
-  /* 2. Change the `linkedSignal` so you use the second signature, supply an object 
+  /* 2. Change the `linkedSignal` so you use the second signature, supply an object
         with source and computation properties */
+  // readonly selectedProduct = linkedSignal({
+  //   source: this.products,
+  //   computation: (products) => products[0]
+  // });
 
   /* 3. In the computation, use the previous value, to check if the selected product
         is still in the list, if not, set the selected product to the first product in the list */
-
+  readonly selectedProduct = linkedSignal<string[], string>({
+    source: this.products,
+    computation: (products, previous) => {
+      // if (!previous) {
+      //   return products[0];
+      // }
+      if (previous && products.includes(previous.value)) {
+        return previous.value;
+      } else {
+        return products[0];
+      }
+    }
+  });
 
   addProduct() {
     this.products.update(prods => [...prods, PRODUCTS[prods.length]]);
@@ -44,7 +61,4 @@ export class AppComponent {
       return this.products()[(index - 1 + this.products().length) % this.products().length];
     });
   }
-
-
-
 }
